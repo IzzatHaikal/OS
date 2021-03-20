@@ -18,11 +18,18 @@ int main() {
     scanf("%d", &processNum);
     int process [processNum];
     for(int i = 0; i<processNum; i++){
-        printf("Enter the block size for block number %d: ", i+1);
+        printf("Enter the process size for process number %d: ", i+1);
         scanf("%d", &process[i]);
     }
-    //first( blockNum, block, processNum, process);
-    best(blockNum, block, processNum, process);
+    int choice;
+    printf("Enter 1 for First Fit and 2 for Best Fit: ");
+    scanf("%d", &choice);
+    if(choice == 1)
+        first(blockNum, block, processNum, process);
+    else if(choice == 2)
+        best(blockNum, block, processNum, process);
+    else
+        printf("Incorrect Input");
 }
 
 void first(int blockNum, int block[], int processNum, int process[]){
@@ -39,6 +46,7 @@ void first(int blockNum, int block[], int processNum, int process[]){
             }
         }
     }
+    printf("\nFirst Fit Condition\n");
     printf(" Process No. Process Size	Block no.\n");
     for(int i = 0; i<processNum; i++){
         printf("%d\t\t%d\t\t",i+1,process[i]);
@@ -61,21 +69,22 @@ void best(int blockNum, int block[], int processNum, int process[]){
         for(int j = 0; j<blockNum; j++){
             if((block[j] >= process[i]) && smallest == -1 && allocateBlock[j] == false){
                 //blockProcess[j] = block[j] - process[i];
-                allocateLocation[i] = j;
                 allocateBlock[j] = true;
                 smallest = j;
-                allocateProcess[i] = true;
             }
-            else if((block[smallest] - process[i] > block[j] - process[i]) && allocateBlock[j] == false && smallest != -1 && (block[j] > process[i])){
-                allocateLocation[i] = j;
+            else if((block[smallest] - process[i] > block[j] - process[i]) && allocateBlock[j] == false && smallest != -1 && (block[j] >= process[i])){
                 //blockProcess[j] = block[j] - process[i];
                 allocateBlock[smallest] = false;
                 allocateBlock[j] = true;
-                allocateProcess [i] = true;
                 smallest = j;
             }
         }
+        if(smallest != -1){
+            allocateProcess[i] = true;
+            allocateLocation[i] = smallest;
+        }
     }
+    printf("\nBest Fit Condition\n");
     printf(" Process No. Process Size	Block no.\n");
     for(int i = 0; i<processNum; i++){
         printf(" %d\t\t%d\t\t",i+1,process[i]);

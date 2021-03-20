@@ -86,7 +86,7 @@ def first(blocksize, m, processSize, n):
 	freeBusy = [False]*m
 	for x in range(n):
 		for y in range(m):
-			if (blocksize[y] > processSize[x]) and freeBusy[y] == False:
+			if (blocksize[y] >= processSize[x]) and freeBusy[y] == False:
 				allocateLocation[x] = y
 				freeBusy[y] = True
 				break
@@ -104,13 +104,17 @@ def first(blocksize, m, processSize, n):
 def best(blockSize, m, processSize, n):
 	allocateLocation = [-1]*n
 	sizeDiff = [0]*m
+	freeBusy = [False]*m
 	for x in range(n):
 		bestIndex = -1
 		for y in range(m):
-			if bestIndex == -1 and sizeDiff[y] == 0 and blockSize[y] > processSize[x]:
+			if bestIndex == -1 and sizeDiff[y] == 0 and blockSize[y] >= processSize[x] and freeBusy[y] == False:
+				freeBusy[y] = True
 				sizeDiff[y] = blockSize[y] - processSize[x]
 				bestIndex = y 
-			elif bestIndex != -1 and (blockSize[y] > processSize[x]) and (sizeDiff[bestIndex] > blockSize[y] - processSize[x]) :
+			elif bestIndex != -1 and (blockSize[y] >= processSize[x]) and (sizeDiff[bestIndex] > blockSize[y] - processSize[x]) and freeBusy[y] == False :
+				freeBusy[bestIndex] = False
+				freeBusy[y] = True
 				sizeDiff[y] = blockSize[y] - processSize[x]
 				sizeDiff[bestIndex] = 0
 				bestIndex = y
@@ -130,6 +134,8 @@ def best(blockSize, m, processSize, n):
 
 blockSize = [100, 500, 200, 300, 600] 
 processSize = [212, 417, 112, 426] 
+# blockSize = [10, 15, 5, 25, 12] 
+# processSize = [5, 14, 13, 9, 30 ]
 m = len(blockSize) 
 n = len(processSize) 
 # firstFit(blockSize, m, processSize, n)
