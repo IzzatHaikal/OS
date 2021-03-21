@@ -64,16 +64,13 @@ void best(int blockNum, int block[], int processNum, int process[]){
     bool allocateProcess[processNum];
     int allocateLocation[processNum];
     for(int i = 0; i<processNum; i++){
-        //int blockProcess[blockNum];
         int smallest = -1;
         for(int j = 0; j<blockNum; j++){
             if((block[j] >= process[i]) && smallest == -1 && allocateBlock[j] == false){
-                //blockProcess[j] = block[j] - process[i];
                 allocateBlock[j] = true;
                 smallest = j;
             }
             else if((block[smallest] - process[i] > block[j] - process[i]) && allocateBlock[j] == false && smallest != -1 && (block[j] >= process[i])){
-                //blockProcess[j] = block[j] - process[i];
                 allocateBlock[smallest] = false;
                 allocateBlock[j] = true;
                 smallest = j;
