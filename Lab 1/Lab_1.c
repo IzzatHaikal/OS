@@ -49,7 +49,7 @@ void first(int blockNum, int block[], int processNum, int process[]){
     printf("\nFirst Fit Condition\n");
     printf(" Process No. Process Size	Block no.\n");
     for(int i = 0; i<processNum; i++){
-        printf("%d\t\t%d\t\t",i+1,process[i]);
+        printf(" %d\t\t%d\t\t",i+1,process[i]);
         if(allocateProcess[i] == true){
             printf(" %d\n", allocateLocation[i]+1);
         }
