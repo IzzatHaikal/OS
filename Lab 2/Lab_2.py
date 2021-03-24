@@ -30,8 +30,6 @@ def FIFO():
 def LRU():
     pageFrameNum = int(input("Enter the number of page frame(s): "))
     pageFrameBit = [None]*pageFrameNum
-    for x in range(pageFrameNum): #to simulate one by one page get into the frame making the first = 1 and last = n
-        pageFrameBit[x] = x+1
     pageFrame = [None]*pageFrameNum
     pageFrameAllocate = [False]*pageFrameNum
     pageNum = int(input("Enter the number of page(s): "))
@@ -39,39 +37,40 @@ def LRU():
     for x in range(pageNum):
         pageOrder[x] = int(input("Enter the {} page: ".format(x+1)))
     missCount = 0
+    firstEntry = False
     for x in range(pageNum):
         found = False
         allocate = False
         smallest = None
         for y in range(pageFrameNum):
-            if pageFrameAllocate[y] == False:
-                pageFrame[y] = pageOrder[x]
+            if pageFrameAllocate[y] == False and firstEntry == False:
                 pageFrameAllocate[y] = True
+                pageFrame[y] = pageOrder[x]
+                pageFrameBit[y] = x
                 allocate = True
+                if x == pageFrameNum-1:
+                    firstEntry = True
+                    break
                 break
-            elif pageFrameAllocate[y] == True:
-                if pageOrder[x] in pageFrame:
-                    if pageFrame[y] != pageOrder[x]:
-                        pageFrameBit[y] -= 1
-                    else:
-                        break
-                else:
-                    if y > 0:
-                        if pageFrameBit[smallest] > pageFrameBit[y]:
-                            smallest = y
-                    else:
-                        smallest = y
-                        
+            elif pageFrameAllocate[y] == True and firstEntry == True:
+                if smallest == None:
+                    smallest = y
+                elif pageFrameBit[smallest] > pageFrameBit[y]:
+                    smallest = y
 
         if smallest != None:
-            pageFrame[smallest] = pageOrder[x]
-            allocate = True
+            if pageOrder[x] in pageFrame:
+                pageFrameBit[pageFrame.index(pageOrder[x])] = x
+            else:
+                pageFrame[smallest] = pageOrder[x]
+                pageFrameBit[smallest] = x
+                allocate = True
 
         if allocate == True:
             missCount += 1
 
-    print(pageFrame)
-    print(missCount)
+
+    print("Total Page Fault = {}".format(missCount))
 
 
 # FIFO()
