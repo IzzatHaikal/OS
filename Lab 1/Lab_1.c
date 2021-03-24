@@ -47,11 +47,11 @@ void first(int blockNum, int block[], int processNum, int process[]){
         }
     }
     printf("\nFirst Fit Condition\n");
-    printf(" Process No. Process Size	Block no.\n");
+    printf(" Process No. Process Size	Block no.  Fragment\n");
     for(int i = 0; i<processNum; i++){
         printf(" %d\t\t%d\t\t",i+1,process[i]);
         if(allocateProcess[i] == true){
-            printf(" %d\n", allocateLocation[i]+1);
+            printf(" %d\t\t%d\n", allocateLocation[i]+1, block[allocateLocation[i]]-process[i]);
         }
         else{
             printf("Not Allocated\n");
@@ -82,11 +82,11 @@ void best(int blockNum, int block[], int processNum, int process[]){
         }
     }
     printf("\nBest Fit Condition\n");
-    printf(" Process No. Process Size	Block no.\n");
+    printf(" Process No. Process Size	Block no.  Fragment\n");
     for(int i = 0; i<processNum; i++){
         printf(" %d\t\t%d\t\t",i+1,process[i]);
         if(allocateProcess[i] == true){
-            printf("%d\n", allocateLocation[i]+1);
+            printf(" %d\t\t%d\n", allocateLocation[i]+1, block[allocateLocation[i]]-process[i]);
         }
         else{
             printf("Not Allocated\n");
