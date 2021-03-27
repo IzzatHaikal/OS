@@ -7,16 +7,20 @@ def FIFO():
     for x in range(pageNum):
         pageOrder[x] = int(input("Enter the {} page: ".format(x+1)))
     missCount = 0
+    firstEntry = False
     for x in range(pageNum):
         found = False
         allocate = False
         for y in range(pageFrameNum):
-            if pageFrameAllocate[y] == False:
+            if pageFrameAllocate[y] == False and firstEntry == False:
                 pageFrame[y] = pageOrder[x]
                 pageFrameAllocate[y] = True
                 allocate = True
+                if x == pageFrameNum-1:
+                    firstEntry = True
+                    break
                 break
-            elif pageFrameAllocate[y] == True:
+            elif pageFrameAllocate[y] == True and firstEntry == True:
                 if pageOrder[x] in pageFrame:
                     break
                 else:
@@ -25,7 +29,7 @@ def FIFO():
                     allocate = True
         if allocate == True:
             missCount += 1
-    print(missCount)
+    print("Total Page Fault = {}".format(missCount))
 
 def LRU():
     pageFrameNum = int(input("Enter the number of page frame(s): "))
@@ -73,5 +77,10 @@ def LRU():
     print("Total Page Fault = {}".format(missCount))
 
 
-# FIFO()
-LRU()
+choice = int(input("Enter 1 for FIFO and 2 for LRU : "))
+if choice == 1:
+    FIFO()
+elif choice == 2:
+    LRU()
+else:
+    print("Invalid Input")
