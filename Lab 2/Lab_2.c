@@ -64,13 +64,13 @@ void FIFO(int pageFrameNum, int pageFrame[], bool pageFrameAllocate[], int pageN
     printf("Total Page Fault = %d", missCount);
 }
 
-void switchFIFO(int pageFrameNum, int pageFrame[], int pageNum, int pageOrder[]){
+void switchFIFO(int pageFrameNum, int pageFrame[], int swap, int pageOrder[]){
     for(int i=0; i<pageFrameNum; i++){
         if(i != pageFrameNum-1){
             pageFrame[i] = pageFrame[i+1];
         }
         else{
-            pageFrame[i] = pageOrder[pageNum];
+            pageFrame[i] = pageOrder[swap];
         }
     }
 }
