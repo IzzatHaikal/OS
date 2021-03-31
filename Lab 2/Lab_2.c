@@ -2,10 +2,11 @@
 #include <stdbool.h>
 
 void FIFO(int pageFrameNum, int pageFrame[], bool pageFrameAllocate[], int pageNum, int pageOrder[]);
-void switchFIFO(int pageFrameNum, int pageFrame[], int pageNum, int pageOrder[]);
+int switchFIFO(int pageFrameNum, int pageFrame[], int pageNum, int pageOrder[], int changePlace);
 void LRU(int pageFrameNum, int pageFrame[], bool pageFrameAllocate[], int pageNum, int pageOrder[]);
 bool findLRU(int pageFrameNum, int pageFrame[], int pageOrder[], int find);
 int indexLRU(int pageFrameNum, int pageFrame[], int pageOrder[], int find);
+void output(int pageFrameNum, int pageFrame[], int frame, int pageOrder[]);
 
 int main(){
     int pageFrameNum;
@@ -33,8 +34,20 @@ int main(){
     
 }
 
+void output(int pageFrameNum, int pageFrame[], int page, int pageOrder[]){
+    printf("%d |",pageOrder[page]);
+    for(int i=0; i<pageFrameNum; i++){
+        if(i <= page)
+            printf("%d|",pageFrame[i]);
+        else
+            printf(" |");
+    }
+    printf("\n");
+}
+
 void FIFO(int pageFrameNum, int pageFrame[], bool pageFrameAllocate[], int pageNum, int pageOrder[]){
-    int missCount = 0;
+    int missCount = 0, changePlace = 0;
+    printf("FIFO :\n");
     for(int i = 0; i<pageNum; i++){
         bool found = false;
         bool allocate = false;
@@ -55,30 +68,38 @@ void FIFO(int pageFrameNum, int pageFrame[], bool pageFrameAllocate[], int pageN
             
         }
         if(found == false){
-            switchFIFO(pageFrameNum, pageFrame, i, pageOrder);
+            changePlace = switchFIFO(pageFrameNum, pageFrame, i, pageOrder,changePlace);
             allocate = true;
         }
         if(allocate == true)
             missCount++;
+        output(pageFrameNum,pageFrame,i,pageOrder);
     }
     printf("Total Page Fault = %d", missCount);
 }
 
-void switchFIFO(int pageFrameNum, int pageFrame[], int swap, int pageOrder[]){
-    for(int i=0; i<pageFrameNum; i++){
-        if(i != pageFrameNum-1){
-            pageFrame[i] = pageFrame[i+1];
-        }
-        else{
-            pageFrame[i] = pageOrder[swap];
-        }
-    }
+int switchFIFO(int pageFrameNum, int pageFrame[], int swap, int pageOrder[], int changePlace){
+    // for(int i=0; i<pageFrameNum; i++){
+    //     if(i != pageFrameNum-1){
+    //         pageFrame[i] = pageFrame[i+1];
+    //     }
+    //     else{
+    //         pageFrame[i] = pageOrder[swap];
+    //     }
+    // }
+    pageFrame[changePlace] = pageOrder[swap];
+    if(changePlace < pageFrameNum-1)
+        changePlace++;
+    else if(changePlace == pageFrameNum-1)
+        changePlace = 0;
+    return changePlace;
 }
 
 void LRU(int pageFrameNum, int pageFrame[], bool pageFrameAllocate[], int pageNum, int pageOrder[]){
     int pageFrameBit[pageFrameNum];
     int missCount = 0;
     bool firstEntry = false;
+    printf("LRU :\n");
     for(int i=0; i<pageNum; i++){
         bool allocate = false;
         int smallest = -1;
@@ -111,6 +132,7 @@ void LRU(int pageFrameNum, int pageFrame[], bool pageFrameAllocate[], int pageNu
         }
         if(allocate == true)
             missCount++;
+        output(pageFrameNum,pageFrame,i,pageOrder);
     }
     printf("Total Page Fault = %d", missCount);
 }
