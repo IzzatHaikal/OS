@@ -79,14 +79,6 @@ void FIFO(int pageFrameNum, int pageFrame[], bool pageFrameAllocate[], int pageN
 }
 
 int switchFIFO(int pageFrameNum, int pageFrame[], int swap, int pageOrder[], int changePlace){
-    // for(int i=0; i<pageFrameNum; i++){
-    //     if(i != pageFrameNum-1){
-    //         pageFrame[i] = pageFrame[i+1];
-    //     }
-    //     else{
-    //         pageFrame[i] = pageOrder[swap];
-    //     }
-    // }
     pageFrame[changePlace] = pageOrder[swap];
     if(changePlace < pageFrameNum-1)
         changePlace++;
