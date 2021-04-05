@@ -38,7 +38,6 @@ def RR():
     timeQuantum = int(input("Enter time quantum: "))
     jobFinish = [0]*jobNum
     jobCheck = [False]*jobNum
-    loopCheck = True
     timeQuantumAccumulate = 0
     while not all(jobCheck):
         for x in range(jobNum):
